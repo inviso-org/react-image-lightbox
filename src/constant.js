@@ -2,7 +2,7 @@
 export const MIN_ZOOM_LEVEL = 0;
 
 // Max image zoom level
-export const MAX_ZOOM_LEVEL = 300;
+export const MAX_ZOOM_LEVEL = 100;
 
 // Size ratio between previous and next zoom levels
 export const ZOOM_RATIO = 1.007;
