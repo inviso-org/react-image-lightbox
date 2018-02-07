@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.6.0"></a>
+# [4.5.0](https://github.com/inviso-org/react-image-lightbox/compare/v4.5.0...v4.6.0) (2018-02-07)
+
+
+### Features
+
+* Custom handleKeyInput prop for interacting with key press events
+
+### Changes
+* Changes max zoom level from 300 to 100 (percentage)
+
 <a name="4.5.0"></a>
 # [4.5.0](https://github.com/fritz-c/react-image-lightbox/compare/v4.4.1...v4.5.0) (2018-01-21)
 
