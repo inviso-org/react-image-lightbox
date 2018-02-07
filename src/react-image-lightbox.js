@@ -535,6 +535,10 @@ class ReactImageLightbox extends Component {
    * Handle user keyboard actions
    */
   handleKeyInput(event) {
+    if (this.props.handleKeyInput) {
+      this.props.handleKeyInput(event);
+    }
+
     event.stopPropagation();
 
     // Ignore key input during animations
@@ -1757,6 +1761,8 @@ ReactImageLightbox.propTypes = {
   closeLabel: PropTypes.string,
 
   imageLoadErrorMessage: PropTypes.node,
+
+  handleKeyInput: PropTypes.func,
 };
 
 ReactImageLightbox.defaultProps = {
@@ -1792,6 +1798,7 @@ ReactImageLightbox.defaultProps = {
   zoomInLabel: 'Zoom in',
   zoomOutLabel: 'Zoom out',
   imageLoadErrorMessage: 'This image failed to load',
+  handleKeyInput: () => {},
 };
 
 export default ReactImageLightbox;
