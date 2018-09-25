@@ -9,6 +9,7 @@ exports[`Snapshot Testing Lightbox renders properly" 1`] = `
   closeLabel="Close lightbox"
   discourageDownloads={false}
   enableZoom={true}
+  handleKeyInput={[Function]}
   imageCaption={null}
   imageCrossOrigin={null}
   imageLoadErrorMessage="This image failed to load"
