@@ -60,13 +60,39 @@ class ReactImageLightbox extends Component {
   }
 
   // Request to transition to the previous image
-  static getTransform({ x = 0, y = 0, zoom = 1, width, targetWidth }) {
+  static getTransform(options = {}) {
+    const maxScaleFactor = MAX_ZOOM_LEVEL / 100
+    const {
+      x = 0,
+      y = 0,
+      zoom = 1,
+      width,
+      targetWidth,
+      zoomLevel,
+    } = options;
+
     let nextX = x;
+
+    // Make sure scaleFactor is not greater than maxScaleFactor
+    // by choosing the lowest value.
+    let scaleFactor = Math.min(
+      maxScaleFactor,
+      zoom * (targetWidth / width)
+    );
+
     const windowWidth = getWindowWidth();
     if (width > windowWidth) {
       nextX += (windowWidth - width) / 2;
     }
-    const scaleFactor = zoom * (targetWidth / width);
+
+    // For some reason the gallery is not always zooming maximum (100%).
+    // With a low screen window it might stop at for instance 98%. This forces
+    // it so zoom in max if zoomLevel is max. If options.zoom is defined we know
+    // it's the current photo and not the previous or next ones, which we do not
+    // want to touch.
+    if (options.zoom && zoomLevel === MAX_ZOOM_LEVEL) {
+      scaleFactor = maxScaleFactor;
+    }
 
     return {
       transform: `translate3d(${nextX}px,${y}px,0) scale3d(${scaleFactor},${scaleFactor},1)`,
@@ -1322,6 +1348,7 @@ class ReactImageLightbox extends Component {
         ...ReactImageLightbox.getTransform({
           ...transforms,
           ...bestImageInfo,
+          zoomLevel,
         }),
       };
 
