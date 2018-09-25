@@ -1,0 +1,16 @@
+version: '2'
+services:
+  app:
+    build:
+      context: .
+
+    command: devops/start-development
+
+    environment:
+      NODE_ENV: development
+
+    volumes:
+      - .:/app/react-image-lightbox/src
+
+    ports:
+      - "3001:3001"
