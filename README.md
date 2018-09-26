@@ -145,6 +145,32 @@ yarn run build
 
 Pull requests are welcome!
 
+## Building for installing locally
+
+Since this currently contains changes not published to NPM, the following steps are needed to create
+a `.tgz` file that can be installed locally:
+
+```sh
+# Starts the docker container
+docker-compose up
+
+# Remove any existing files from the dist folder
+yarn run clean
+yarn run clean:demo
+
+# Lints and builds the code, placing the result in the dist directory.
+NODE_ENV=production yarn run build
+
+# Creates the tar-zip file
+npm pack
+```
+
+To install the generated tar-zip file, move it to you project and run:
+
+```sh
+yarn add file:path/to-file.tgz
+```
+
 ## License
 
 MIT

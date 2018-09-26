@@ -13,4 +13,4 @@ services:
       - .:/app/react-image-lightbox/src
 
     ports:
-      - "3001:3001"
+      - "1234:1234"
