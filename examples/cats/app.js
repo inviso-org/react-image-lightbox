@@ -20,8 +20,14 @@ import '../shared/favicon/favicon-32x32.png';
 import '../shared/favicon/favicon.ico';
 import '../shared/favicon/safari-pinned-tab.svg';
 
-const images = [image1, image2, image3, image4];
-const thumbs = [image1Thumb, image2Thumb, image3Thumb, image4Thumb];
+// const images = [image1, image2, image3, image4];
+// const thumbs = [image1Thumb, image2Thumb, image3Thumb, image4Thumb];
+const images = [
+  '//cdn.fs.system.inviso.no/wBN1xGxQI6xkPiXQwBmb?cache=true&policy=eyJoYW5kbGUiOiJ3Qk4xeEd4UUk2eGtQaVhRd0JtYiIsImV4cGlyeSI6MTU3MDEwMTc5NH0=&signature=afd417b0d1a7918c2e096d74e628aac8b1cf5c883e42f97a0719c7c49242b2b0',
+  '//cdn.fs.system.inviso.no/U8kB1tkT9amDLoLA6UrM?cache=true&policy=eyJoYW5kbGUiOiJVOGtCMXRrVDlhbURMb0xBNlVyTSIsImV4cGlyeSI6MTU3MDEwMTc5NH0=&signature=2709fc82dba7e4ebd8192d641a5598e250bcbe88eaa1b4703e76f88490cccb24',
+  '//cdn.fs.system.inviso.no/lQ72zH8PRQq7tutvbmcJ?cache=true&policy=eyJoYW5kbGUiOiJsUTcyekg4UFJRcTd0dXR2Ym1jSiIsImV4cGlyeSI6MTU3MDEwMTc5NH0=&signature=2dc89964c9d2a316ae133bf70c0dbff046ebb84b85d9be858c8086c9e0590a1e',
+  '//cdn.fs.system.inviso.no/ziu2UfQ8QE6uFHlYqbRo?cache=true&policy=eyJoYW5kbGUiOiJ6aXUyVWZROFFFNnVGSGxZcWJSbyIsImV4cGlyeSI6MTU3MDEwMTc5NH0=&signature=d2b65767c20eb3208a3a033a6634bcd34f8ec28d8ccb5f00e2a79a46b98ca552',
+]
 
 const titles = [
   '',
@@ -130,11 +136,6 @@ class App extends Component {
           nextSrc={images[(this.state.index + 1) % images.length]}
           prevSrc={
             images[(this.state.index + images.length - 1) % images.length]
-          }
-          mainSrcThumbnail={thumbs[this.state.index]}
-          nextSrcThumbnail={thumbs[(this.state.index + 1) % images.length]}
-          prevSrcThumbnail={
-            thumbs[(this.state.index + images.length - 1) % images.length]
           }
           onCloseRequest={this.closeLightbox}
           onMovePrevRequest={this.movePrev}

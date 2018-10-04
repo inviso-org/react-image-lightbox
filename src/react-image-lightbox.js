@@ -61,41 +61,28 @@ class ReactImageLightbox extends Component {
 
   // Request to transition to the previous image
   static getTransform(options = {}) {
-    const maxScaleFactor = MAX_ZOOM_LEVEL / 100
     const {
       x = 0,
       y = 0,
       zoom = 1,
       width,
       targetWidth,
-      zoomLevel,
+      scaleFactor,
     } = options;
 
     let nextX = x;
 
-    // Make sure scaleFactor is not greater than maxScaleFactor
-    // by choosing the lowest value.
-    let scaleFactor = Math.min(
-      maxScaleFactor,
-      zoom * (targetWidth / width)
-    );
+    const nextScaleFactor = options.zoom
+      ? scaleFactor
+      : zoom * (targetWidth / width);
 
     const windowWidth = getWindowWidth();
     if (width > windowWidth) {
       nextX += (windowWidth - width) / 2;
     }
 
-    // For some reason the gallery is not always zooming maximum (100%).
-    // With a low screen window it might stop at for instance 98%. This forces
-    // it so zoom in max if zoomLevel is max. If options.zoom is defined we know
-    // it's the current photo and not the previous or next ones, which we do not
-    // want to touch.
-    if (options.zoom && zoomLevel === MAX_ZOOM_LEVEL) {
-      scaleFactor = maxScaleFactor;
-    }
-
     return {
-      transform: `translate3d(${nextX}px,${y}px,0) scale3d(${scaleFactor},${scaleFactor},1)`,
+      transform: `translate3d(${nextX}px,${y}px,0) scale3d(${nextScaleFactor},${nextScaleFactor},1)`,
     };
   }
 
@@ -432,6 +419,13 @@ class ReactImageLightbox extends Component {
   }
 
   /**
+   * Get max scale factor, where 1 is 100 %
+   */
+  maxScaleFactor() {
+    return MAX_ZOOM_LEVEL / 100
+  }
+
+  /**
    * Get the size of the lightbox in pixels
    */
   getLightboxRect() {
@@ -461,18 +455,30 @@ class ReactImageLightbox extends Component {
       return;
     }
 
+    const maxScaleFactor = this.maxScaleFactor()
+    const zoomMultiplier = this.getZoomMultiplier(zoomLevel);
+    const imageBaseSize = this.getBestImageForType('mainSrc');
+
+    const scaleFactor = Math.min(
+      maxScaleFactor,
+      zoomMultiplier * (imageBaseSize.targetWidth / imageBaseSize.width)
+    );
+
     // Constrain zoom level to the set bounds
     const nextZoomLevel = Math.max(
       MIN_ZOOM_LEVEL,
-      Math.min(MAX_ZOOM_LEVEL, zoomLevel)
+      zoomLevel,
     );
-
+    console.log(scaleFactor, nextZoomLevel)
     // Ignore requests that don't change the zoom level
     if (nextZoomLevel === this.state.zoomLevel) {
+      return;
+    } else if (scaleFactor === this.state.scaleFactor) {
       return;
     } else if (nextZoomLevel === MIN_ZOOM_LEVEL) {
       // Snap back to center if zoomed all the way out
       this.setState({
+        scaleFactor,
         zoomLevel: nextZoomLevel,
         offsetX: 0,
         offsetY: 0,
@@ -481,7 +487,6 @@ class ReactImageLightbox extends Component {
       return;
     }
 
-    const imageBaseSize = this.getBestImageForType('mainSrc');
     if (imageBaseSize === null) {
       return;
     }
@@ -542,6 +547,7 @@ class ReactImageLightbox extends Component {
     }
 
     this.setState({
+      scaleFactor,
       zoomLevel: nextZoomLevel,
       offsetX: nextOffsetX,
       offsetY: nextOffsetY,
@@ -1303,6 +1309,7 @@ class ReactImageLightbox extends Component {
     } = this.props;
     const {
       zoomLevel,
+      scaleFactor,
       offsetX,
       offsetY,
       isClosing,
@@ -1340,7 +1347,7 @@ class ReactImageLightbox extends Component {
         ...ReactImageLightbox.getTransform({
           ...transforms,
           ...bestImageInfo,
-          zoomLevel,
+          scaleFactor,
         }),
       };
 
@@ -1428,6 +1435,7 @@ class ReactImageLightbox extends Component {
       }
     };
 
+    const maxScaleFactor = this.maxScaleFactor();
     const zoomMultiplier = this.getZoomMultiplier();
     // Next Image (displayed on the right)
     addImage('nextSrc', 'ril-image-next ril__imageNext', {
@@ -1568,7 +1576,7 @@ class ReactImageLightbox extends Component {
                       'ril__toolbarItemChild',
                       'ril__builtinButton',
                       'ril__zoomInButton',
-                      ...(zoomLevel === MAX_ZOOM_LEVEL
+                      ...(scaleFactor === maxScaleFactor
                         ? ['ril__builtinButtonDisabled']
                         : []),
                     ].join(' ')}
@@ -1576,10 +1584,10 @@ class ReactImageLightbox extends Component {
                       this.zoomInBtn = el
                     }}
                     disabled={
-                      this.isAnimating() || zoomLevel === MAX_ZOOM_LEVEL
+                      this.isAnimating() || scaleFactor === maxScaleFactor
                     }
                     onClick={
-                      !this.isAnimating() && zoomLevel !== MAX_ZOOM_LEVEL
+                      !this.isAnimating() && scaleFactor !== maxScaleFactor
                         ? this.handleZoomInButtonClick
                         : undefined
                     }
