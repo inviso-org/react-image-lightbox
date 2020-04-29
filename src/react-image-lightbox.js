@@ -1334,6 +1334,18 @@ class ReactImageLightbox extends Component {
       keyEndings[name] = keyEnding;
     });
 
+    const loadingIcon = (
+      <div className="ril-loading-circle ril__loadingCircle ril__loadingContainer__icon">
+        {[...new Array(12)].map((_, index) => (
+          <div
+            // eslint-disable-next-line react/no-array-index-key
+            key={index}
+            className="ril-loading-circle-point ril__loadingCirclePoint"
+          />
+        ))}
+      </div>
+    );
+
     // Images to be displayed
     const images = [];
     const addImage = (srcType, imageClass, transforms) => {
@@ -1377,18 +1389,6 @@ class ReactImageLightbox extends Component {
         return;
       }
       if (bestImageInfo === null) {
-        const loadingIcon = (
-          <div className="ril-loading-circle ril__loadingCircle ril__loadingContainer__icon">
-            {[...new Array(12)].map((_, index) => (
-              <div
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
-                className="ril-loading-circle-point ril__loadingCirclePoint"
-              />
-            ))}
-          </div>
-        );
-
         // Fall back to loading icon if the thumbnail has not been loaded
         images.push(
           <div
@@ -1519,7 +1519,8 @@ class ReactImageLightbox extends Component {
             className="ril-inner ril__inner"
             onClick={clickOutsideToClose ? this.closeIfClickInner : undefined}
           >
-            {images}
+            {this.props.loading && loadingIcon}
+            {!this.props.loading && images}
           </div>
 
           {prevSrc && (
@@ -1769,6 +1770,9 @@ ReactImageLightbox.propTypes = {
   // Other
   //-----------------------------
 
+  // Show loading screen
+  loading: PropTypes.bool,
+
   // Array of custom toolbar buttons
   toolbarButtons: PropTypes.arrayOf(PropTypes.node),
 
@@ -1809,6 +1813,7 @@ ReactImageLightbox.defaultProps = {
   imageCrossOrigin: null,
   keyRepeatKeyupBonus: 40,
   keyRepeatLimit: 180,
+  loading: false,
   mainSrcThumbnail: null,
   nextLabel: 'Next image',
   nextSrc: null,

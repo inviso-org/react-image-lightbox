@@ -17,6 +17,7 @@ exports[`Snapshot Testing Lightbox renders properly" 1`] = `
   imageTitle={null}
   keyRepeatKeyupBonus={40}
   keyRepeatLimit={180}
+  loading={false}
   mainSrc="/fake/image/src.jpg"
   mainSrcThumbnail={null}
   nextLabel="Next image"
@@ -102,6 +103,7 @@ exports[`Snapshot Testing Lightbox renders properly" 1`] = `
             >
               <div
                 class="ril-outer ril__outer ril__outerAnimating  "
+                style="transition: opacity 300ms; animation-duration: 300ms; animation-direction: reverse;"
                 tabindex="-1"
               >
                 <div
